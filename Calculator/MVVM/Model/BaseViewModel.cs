@@ -14,7 +14,7 @@ namespace Calculator.MVVM.Model
 
         protected void OnPropertyChanged([CallerMemberName] string prop = "")
         {
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(prop)); 
         }
     }
 }
