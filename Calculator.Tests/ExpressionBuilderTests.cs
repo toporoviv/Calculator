@@ -73,7 +73,31 @@ namespace Calculator.Tests
         [Test]
         public void IsValid_InvalidExpression_ShouldReturnFalse()
         {
+            string expression = "3 - 2 + ((1 * 4))";
+
+            var notation = new PolishNotation(expression);
+
+            var result = notation.IsValid(Calculator.MVVM.Model.Calculator._operations);
+
+            Assert.That(result, Is.EqualTo(false));
+        }
+
+        [Test]
+        public void IsValid_SecondInvalidExpression_ShouldReturnFalse()
+        {
             string expression = "1 - 2 + ( * ) - 3";
+
+            var notation = new PolishNotation(expression);
+
+            var result = notation.IsValid(Calculator.MVVM.Model.Calculator._operations);
+
+            Assert.That(result, Is.EqualTo(false));
+        }
+
+        [Test]
+        public void IsValid_ThirdInvalidExpression_ShouldReturnFalse()
+        {
+            string expression = "1.25 - 2.32o + (53.t35) - 3.005";
 
             var notation = new PolishNotation(expression);
 
