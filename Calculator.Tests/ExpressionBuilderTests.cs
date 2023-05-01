@@ -43,7 +43,7 @@ namespace Calculator.Tests
 
             var result = string.Join(" ", notation.GetExpression());
 
-            Assert.That(result, Is.EqualTo("+ 1 - 2 3"));
+            Assert.That(result, Is.EqualTo("* - 2 2.5 / 3 - + 4 2.32 1"));
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace Calculator.Tests
         }
 
         [Test]
-        public void IsValid_InvalidExpression_ShouldReturnFalse()
+        public void IsValid_ValidExpression_ShouldReturnFalse()
         {
             string expression = "3 - 2 + ((1 * 4))";
 
@@ -79,7 +79,19 @@ namespace Calculator.Tests
 
             var result = notation.IsValid(Calculator.MVVM.Model.Calculator._operations);
 
-            Assert.That(result, Is.EqualTo(false));
+            Assert.That(result, Is.EqualTo(true));
+        }
+
+        [Test]
+        public void IsValid_ComplexValidExpression_ShouldReturnTrue()
+        {
+            string expression = "3.33 - 2.13 + ((1.002 * 4.25) - 1 / (2.5 - 5.3))";
+
+            var notation = new PolishNotation(expression);
+
+            var result = notation.IsValid(Calculator.MVVM.Model.Calculator._operations);
+
+            Assert.That(result, Is.EqualTo(true));
         }
 
         [Test]
