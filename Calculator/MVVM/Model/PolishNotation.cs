@@ -41,7 +41,7 @@ namespace Calculator.MVVM.Model
 
             int digitCount = 0;
 
-            var tempString = Regex.Replace(_expression, @"(-?\d+)", match =>
+            var tempString = Regex.Replace(_expression, @"(\d+\.\d+)|(\d+)", match =>
             {
                 digitCount++;
                 return string.Empty;    
