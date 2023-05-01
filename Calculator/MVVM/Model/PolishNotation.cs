@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace Calculator.MVVM.Model
         public PolishNotation(string expression)
         {
             _expression = expression.Replace(" ", string.Empty);
+            if (_expression != string.Empty && !_expression.StartsWith("0+")) _expression = $"0+{_expression}";
         }
 
         public List<string> GetExpression()
@@ -27,35 +29,30 @@ namespace Calculator.MVVM.Model
             if (_expression == null) return false;
             if (_expression == string.Empty) return true;
 
-            int leftCount = 0, rightCount = 0;
+            int leftScopeCount = 0, rightScopeCount = 0;
 
             for (int i = 0; i < _expression.Length; i++)
             {
-                if (_expression[i] == '(') leftCount++;
-                else if (_expression[i] == ')') rightCount++;
+                if (_expression[i] == '(') leftScopeCount++;
+                else if (_expression[i] == ')') rightScopeCount++;
 
-                if (rightCount > leftCount) return false;
+                if (rightScopeCount > leftScopeCount) return false;
             }
 
-            if (leftCount != rightCount) return false;
+            if (leftScopeCount != rightScopeCount) return false;
 
-            int digitCount = 0;
+            int digitCount = 0, operationCount = 0;
 
-            var tempString = Regex.Replace(_expression, @"(\d+\.\d+)|(\d+)", match =>
+            var tempString = Regex.Replace(_expression, @"(\d+\.\d+)|(\d+)|([\+\-\*/\(\)])", match =>
             {
-                digitCount++;
+                if (match.Value.Any(x => char.IsDigit(x))) digitCount++;
+                else operationCount++;
                 return string.Empty;    
             });
 
-            int operationCount = 0;
+            int totalScopeCount = leftScopeCount + rightScopeCount;
 
-            foreach (var i in operations)
-            {
-                tempString = tempString.Replace(i.Key, string.Empty);
-                operationCount++;
-            }
-
-            if (operationCount != digitCount - 1) return false;
+            if (operationCount - totalScopeCount != digitCount - 1) return false;
 
             if (tempString.Length > 0) return false;
 
