@@ -10,6 +10,6 @@ namespace Calculator.MVVM.Interfaces
     {
         List<string> GetExpression();
 
-        bool IsValid(Dictionary<string, int> operations);
+        bool IsValid();
     }
 }
