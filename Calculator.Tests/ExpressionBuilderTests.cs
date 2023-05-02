@@ -15,11 +15,11 @@ namespace Calculator.Tests
         {
             string expression = "1 + 2";
 
-            var notation = new PolishNotation(expression);
+            var notation = new PolishNotation(new ExpressionValidator(), expression);
 
             var result = string.Join(" ", notation.GetExpression());
 
-            Assert.That(result, Is.EqualTo("+ 1 2"));
+            Assert.That(result, Is.EqualTo("0 1 + 2 +"));
         }
 
         [Test]
@@ -27,23 +27,35 @@ namespace Calculator.Tests
         {
             string expression = "1 + 2 - 3";
 
-            var notation = new PolishNotation(expression);
+            var notation = new PolishNotation(new ExpressionValidator(), expression);
 
             var result = string.Join(" ", notation.GetExpression());
 
-            Assert.That(result, Is.EqualTo("+ 1 - 2 3"));
+            Assert.That(result, Is.EqualTo("0 1 + 2 + 3 -"));
         }
 
         [Test]
         public void GetExpression_ComplexExpression_ShouldProduceCorrectPolishNotation()
         {
-            var expression = "(2 - 2.5) * 3 / ((4 + 2.32) - 1))";
+            var expression = "(2 - 2.5) * 3 / ((4 + 2.32) - 1)";
 
-            var notation = new PolishNotation(expression);
+            var notation = new PolishNotation(new ExpressionValidator(), expression);
 
             var result = string.Join(" ", notation.GetExpression());
 
-            Assert.That(result, Is.EqualTo("* - 2 2.5 / 3 - + 4 2.32 1"));
+            Assert.That(result, Is.EqualTo("0 2 2.5 - 3 * 4 2.32 + 1 - / +"));
+        }
+
+        [Test]
+        public void GetExpression_SecondComplexExpression_ShouldProduceCorrectPolishNotation()
+        {
+            var expression = "3 * (0 - 2.5 * 1.32) / ((5)) + 2.3";
+
+            var notation = new PolishNotation(new ExpressionValidator(), expression);
+
+            var result = string.Join(" ", notation.GetExpression());
+
+            Assert.That(result, Is.EqualTo("0 3 0 2.5 1.32 * - * 5 / 2.3 + +"));
         }
 
         [Test]
@@ -51,9 +63,9 @@ namespace Calculator.Tests
         {
             string expression = string.Empty;
 
-            var notation = new PolishNotation(expression);
+            var notation = new PolishNotation(new ExpressionValidator(), expression);
 
-            var result = notation.IsValid(Calculator.MVVM.Model.Calculator._operations);
+            var result = notation.IsValid();
 
             Assert.That(result, Is.EqualTo(true));
         }
@@ -63,9 +75,9 @@ namespace Calculator.Tests
         {
             string expression = "(3 + 2) - 1 * 4 - (5 - 2 / 3)";
 
-            var notation = new PolishNotation(expression);
+            var notation = new PolishNotation(new ExpressionValidator(), expression);
 
-            var result = notation.IsValid(Calculator.MVVM.Model.Calculator._operations);
+            var result = notation.IsValid();
 
             Assert.That(result, Is.EqualTo(true));
         }
@@ -75,9 +87,9 @@ namespace Calculator.Tests
         {
             string expression = "3 - 2 + ((1 * 4))";
 
-            var notation = new PolishNotation(expression);
+            var notation = new PolishNotation(new ExpressionValidator(), expression);
 
-            var result = notation.IsValid(Calculator.MVVM.Model.Calculator._operations);
+            var result = notation.IsValid();
 
             Assert.That(result, Is.EqualTo(true));
         }
@@ -87,9 +99,9 @@ namespace Calculator.Tests
         {
             string expression = "3.33 - 2.13 + ((1.002 * 4.25) - 1 / (2.5 - 5.3))";
 
-            var notation = new PolishNotation(expression);
+            var notation = new PolishNotation(new ExpressionValidator(), expression);
 
-            var result = notation.IsValid(Calculator.MVVM.Model.Calculator._operations);
+            var result = notation.IsValid();
 
             Assert.That(result, Is.EqualTo(true));
         }
@@ -99,9 +111,9 @@ namespace Calculator.Tests
         {
             string expression = "1 - 2 + ( * ) - 3";
 
-            var notation = new PolishNotation(expression);
+            var notation = new PolishNotation(new ExpressionValidator(), expression);
 
-            var result = notation.IsValid(Calculator.MVVM.Model.Calculator._operations);
+            var result = notation.IsValid();
 
             Assert.That(result, Is.EqualTo(false));
         }
@@ -111,9 +123,9 @@ namespace Calculator.Tests
         {
             string expression = "1.25 - 2.32o + (53.t35) - 3.005";
 
-            var notation = new PolishNotation(expression);
+            var notation = new PolishNotation(new ExpressionValidator(), expression);
 
-            var result = notation.IsValid(Calculator.MVVM.Model.Calculator._operations);
+            var result = notation.IsValid();
 
             Assert.That(result, Is.EqualTo(false));
         }
@@ -123,9 +135,9 @@ namespace Calculator.Tests
         {
             string expression = "x - ( + t * 3))";
 
-            var notation = new PolishNotation(expression);
+            var notation = new PolishNotation(new ExpressionValidator(), expression);
 
-            var result = notation.IsValid(Calculator.MVVM.Model.Calculator._operations);
+            var result = notation.IsValid();
 
             Assert.That(result, Is.EqualTo(false));
         }
@@ -135,9 +147,9 @@ namespace Calculator.Tests
         {
             string expression = "x + y - t / x";
 
-            var notation = new PolishNotation(expression);
+            var notation = new PolishNotation(new ExpressionValidator(), expression);
 
-            var result = notation.IsValid(Calculator.MVVM.Model.Calculator._operations);
+            var result = notation.IsValid();
 
             Assert.That(result, Is.EqualTo(false));
         }
