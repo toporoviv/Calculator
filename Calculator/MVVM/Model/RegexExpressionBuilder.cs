@@ -36,7 +36,7 @@ namespace Calculator.MVVM.Model
 
         public List<string> GetUsedOperations()
         {
-            return Calculator._operations.Keys.ToList();
+            return Calculator.Operations.Keys.ToList();
         }
     }
 }
