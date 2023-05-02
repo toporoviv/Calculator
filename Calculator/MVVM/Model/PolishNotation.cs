@@ -1,7 +1,9 @@
-﻿using Calculator.MVVM.Interfaces;
+﻿using Calculator.MVVM.Exceptions;
+using Calculator.MVVM.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -12,51 +14,70 @@ namespace Calculator.MVVM.Model
     public class PolishNotation : IExpressionBuilder
     {
         private readonly string _expression;
+        private readonly IExpressionValidator _expressionValidator;
 
-        public PolishNotation(string expression)
+        public PolishNotation(IExpressionValidator expressionValidator, string expression)
         {
-            _expression = expression.Replace(" ", string.Empty);
-            if (_expression != string.Empty && !_expression.StartsWith("0+")) _expression = $"0+{_expression}";
+            _expressionValidator = expressionValidator;
+            _expression = _expressionValidator.GetNormalizedExpression(expression);
         }
 
         public List<string> GetExpression()
         {
-            throw new NotImplementedException();
-        }
+            if (!IsValid()) throw new FormatException();
 
-        public bool IsValid(Dictionary<string, int> operations)
-        {
-            if (_expression == null) return false;
-            if (_expression == string.Empty) return true;
+            string expression = string.Empty;
 
-            int leftScopeCount = 0, rightScopeCount = 0;
+            var matches = Regex.Matches(_expression, RegexHelper.Pattern);
 
-            for (int i = 0; i < _expression.Length; i++)
+            var operationsStack = new Stack<string>();
+
+            for (int i = 0; i < matches.Count; i++)
             {
-                if (_expression[i] == '(') leftScopeCount++;
-                else if (_expression[i] == ')') rightScopeCount++;
+                string value = matches[i].Value;
 
-                if (rightScopeCount > leftScopeCount) return false;
+                // Если это число
+                if (value.Any(x => char.IsDigit(x))) expression += value + " ";
+                else // оператор
+                {
+                    if (value == "(") operationsStack.Push(value);
+                    else if (value == ")")
+                    {
+                        var stackElement = operationsStack.Pop();
+
+                        while (stackElement != "(")
+                        {
+                            expression += stackElement + " ";
+                            stackElement = operationsStack.Pop();
+                        }
+                    }
+                    else
+                    {
+                        if (operationsStack.Count > 0)
+                        {
+                            if (GetOperationPriority(value) <=
+                                GetOperationPriority(operationsStack.Peek())) expression += operationsStack.Pop() + " ";
+                        }
+
+                        operationsStack.Push(value);
+                    }
+                }
             }
 
-            if (leftScopeCount != rightScopeCount) return false;
+            while (operationsStack.Count != 0) expression += operationsStack.Pop() + " ";
 
-            int digitCount = 0, operationCount = 0;
+            return expression.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+        }
 
-            var tempString = Regex.Replace(_expression, @"(\d+\.\d+)|(\d+)|([\+\-\*/\(\)])", match =>
-            {
-                if (match.Value.Any(x => char.IsDigit(x))) digitCount++;
-                else operationCount++;
-                return string.Empty;    
-            });
+        public bool IsValid()
+        {
+            return _expressionValidator.IsValidExpression(_expression);
+        }
 
-            int totalScopeCount = leftScopeCount + rightScopeCount;
-
-            if (operationCount - totalScopeCount != digitCount - 1) return false;
-
-            if (tempString.Length > 0) return false;
-
-            return true;
+        private int GetOperationPriority(string operation)
+        {
+            if (Calculator.Operations.ContainsKey(operation)) return Calculator.Operations[operation];
+            else throw new OperationNotExistException($"операции {operation} не существует");
         }
     }
 }
