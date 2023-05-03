@@ -15,6 +15,7 @@ namespace Calculator.MVVM.Model
             var currentExpression = expression.Replace(" ", string.Empty);
             if (currentExpression != string.Empty)
             {
+                currentExpression = currentExpression.Replace("--", "+");
                 if (currentExpression.StartsWith("-")) currentExpression = $"0{currentExpression}";
                 else currentExpression = $"0+{currentExpression}";
             }
