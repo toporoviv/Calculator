@@ -25,8 +25,7 @@ namespace Calculator.MVVM.Model
 
         public bool IsValidExpression(string expression)
         {
-            if (expression == null) return false;
-            if (expression == string.Empty) return true;
+            if (string.IsNullOrEmpty(expression)) return false;
 
             int leftScopeCount = 0, rightScopeCount = 0;
 
