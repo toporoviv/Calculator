@@ -59,7 +59,7 @@ namespace Calculator.Tests
         }
 
         [Test]
-        public void IsValid_EmptyString_ShouldReturnTrue()
+        public void IsValid_EmptyString_ShouldReturnFalse()
         {
             string expression = string.Empty;
 
@@ -67,7 +67,7 @@ namespace Calculator.Tests
 
             var result = notation.IsValid();
 
-            Assert.That(result, Is.EqualTo(true));
+            Assert.That(result, Is.EqualTo(false));
         }
 
         [Test]
