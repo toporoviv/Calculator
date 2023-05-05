@@ -10,6 +10,7 @@ namespace Calculator.MVVM.Model
     public static class RegexHelper
     {
         public static string Pattern { get; } = @"(\d+\.\d+)|(\d+)";
+        public static string PatternForReplace { get; } = @"([\D\)]-\d+\.\d+)|([\D\)]-\d+)";
 
         static RegexHelper()
         {
