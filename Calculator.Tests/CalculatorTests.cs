@@ -95,5 +95,33 @@ namespace Calculator.Tests
                 var result = calculator.GetAnswer(notation);
             });
         }
+
+        [Test]
+        public void GetAnswer_SimplyValidExpressionWithUnaryMinus_ShouldReturnCorrectResult()
+        {
+            string expression = "4 / (-2)";
+
+            var notation = new PolishNotation(new ExpressionValidator(), expression);
+
+            var calculator = new Calculator.MVVM.Model.Calculator();
+
+            var result = calculator.GetAnswer(notation);
+
+            Assert.That(result, Is.EqualTo(-2).Within(0.001));
+        }
+
+        [Test]
+        public void GetAnswer_ComplexValidExpressionWithUnaryMinus_ShouldReturnCorrectResult()
+        {
+            string expression = "-5.5 - -2.5 + (-0.23 - -((23)) / -4.2)";
+
+            var notation = new PolishNotation(new ExpressionValidator(), expression);
+
+            var calculator = new Calculator.MVVM.Model.Calculator();
+
+            var result = calculator.GetAnswer(notation);
+
+            Assert.That(result, Is.EqualTo(-8.706).Within(0.001));
+        }
     }
 }

@@ -43,7 +43,7 @@ namespace Calculator.Tests
 
             var result = string.Join(" ", notation.GetExpression());
 
-            Assert.That(result, Is.EqualTo("0 2 2.5 - 3 * 4 2.32 + 1 - / +"));
+            Assert.That(result, Is.EqualTo("0 2 2.5 - 3 * 4 2.32 + 0 1 - + / +"));
         }
 
         [Test]
