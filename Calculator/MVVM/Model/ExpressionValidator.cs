@@ -16,6 +16,13 @@ namespace Calculator.MVVM.Model
             if (currentExpression != string.Empty)
             {
                 currentExpression = currentExpression.Replace("--", "+");
+                currentExpression = Regex.Replace(currentExpression, RegexHelper.PatternForReplace, match =>
+                {
+                    var str = match.Value.Split('-');
+                    if (str[0] == ")") return $"{str[0]}+(0-{str[1]})";
+
+                    return $"{str[0]}(0-{str[1]})";
+                });
                 if (currentExpression.StartsWith("-")) currentExpression = $"0{currentExpression}";
                 else currentExpression = $"0+{currentExpression}";
             }
