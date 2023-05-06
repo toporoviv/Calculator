@@ -59,7 +59,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="MVVM\Exceptions\ExpressionLengthOverflowException.cs" />
     <Compile Include="MVVM\Model\Command.cs" />
+    <Compile Include="MVVM\Model\Helper.cs" />
+    <Compile Include="MVVM\Model\TextBoxValidator.cs" />
+    <Compile Include="MVVM\Model\Validator\BaseTextBoxValidator.cs" />
     <Compile Include="MVVM\ViewModel\CalculatorViewModel.cs" />
     <Compile Include="MVVM\View\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -77,7 +81,7 @@
     <Compile Include="MVVM\Interfaces\IRegexExpressionBuilder.cs" />
     <Compile Include="MVVM\Model\BaseViewModel.cs" />
     <Compile Include="MVVM\Model\Calculator.cs" />
-    <Compile Include="MVVM\Model\ExpressionValidator.cs" />
+    <Compile Include="MVVM\Model\Validator\ExpressionValidator.cs" />
     <Compile Include="MVVM\Model\PolishNotation.cs" />
     <Compile Include="MVVM\Model\RegexExpressionBuilder.cs" />
     <Compile Include="MVVM\Model\RegexHelper.cs" />
