@@ -1,6 +1,7 @@
 ﻿using Calculator.MVVM.Exceptions;
 using Calculator.MVVM.Interfaces;
 using Calculator.MVVM.Model;
+using Calculator.MVVM.Model.Validator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,10 @@ namespace Calculator.MVVM.ViewModel
 {
     public class CalculatorViewModel : BaseViewModel
     {
-        private Model.Calculator _calculator;
+        private readonly Model.Calculator _calculator;
         private IExpressionBuilder _notation;
-        private IExpressionValidator _expressionValidator;
+        private BaseTextBoxValidator _textBoxValidator;
+        private readonly IExpressionValidator _expressionValidator;
         private string _expression;
 
         public string Expression
@@ -33,7 +35,19 @@ namespace Calculator.MVVM.ViewModel
         public CalculatorViewModel()
         {
             _calculator = new Model.Calculator();
+            _expression = string.Empty;
             _expressionValidator = new ExpressionValidator();
+            _textBoxValidator = new TextBoxValidator { FontSize = 20, TextBoxWidth = 280 };
+        }
+
+        public BaseTextBoxValidator TextBoxValidator
+        {
+            get => _textBoxValidator;
+            set  
+            {
+                _textBoxValidator = value;
+                OnPropertyChanged(nameof(TextBoxValidator));
+            }
         }
 
         public ICommand EqualCommand
@@ -49,11 +63,11 @@ namespace Calculator.MVVM.ViewModel
                 {
                     MessageBox.Show(ex.Message);
                 }
-                catch(FormatException ex)
+                catch(FormatException)
                 {
                     MessageBox.Show("Введена некорректная строка");
                 }
-                catch (DivideByZeroException ex)
+                catch (DivideByZeroException)
                 {
                     MessageBox.Show("На 0 делить нельзя");
                 }
@@ -68,14 +82,26 @@ namespace Calculator.MVVM.ViewModel
         {
             get => new Command(obj =>
             {
-                string symbol = obj as string;
-                Expression += symbol;
+                try
+                {
+                    string symbol = obj as string;
+                    _textBoxValidator.SymbolCount += symbol.Length;
+                    Expression += symbol;
+                }
+                catch(ExpressionLengthOverflowException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             });
         }
 
         public ICommand ClearCommand
         {
-            get => new Command(obj => Expression = "");
+            get => new Command(obj =>
+            {
+                Expression = "";
+                _textBoxValidator.SymbolCount = 0;
+            });
         }
     }
 }
