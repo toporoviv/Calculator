@@ -37,7 +37,7 @@ namespace Calculator.MVVM.ViewModel
             _calculator = new Model.Calculator();
             _expression = string.Empty;
             _expressionValidator = new ExpressionValidator();
-            _textBoxValidator = new TextBoxValidator { FontSize = 20, TextBoxWidth = 280 };
+            _textBoxValidator = new TextBoxValidator { FontSize = 20, TextBoxWidth = 295 };
         }
 
         public BaseTextBoxValidator TextBoxValidator
