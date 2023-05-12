@@ -124,5 +124,47 @@ namespace Calculator.Tests
 
             Assert.That(result, Is.EqualTo(-8.706).Within(0.001));
         }
+
+        [Test]
+        public void GetAnswer_SimplyValidExpressionWithPowOperation_ShouldReturnCorrectResult()
+        {
+            string expression = "2 ^ 2 + 2 ^ 3";
+
+            var notation = new PolishNotation(new ExpressionValidator(), expression);
+
+            var calculator = new Calculator.MVVM.Model.Calculator();
+
+            var result = calculator.GetAnswer(notation);
+
+            Assert.That(result, Is.EqualTo(12).Within(0.001));
+        }
+
+        [Test]
+        public void GetAnswer_ValidExpressionWithPowOperation_ShouldReturnCorrectResult()
+        {
+            string expression = "(2^0 + 2 ^ -1)^2";
+
+            var notation = new PolishNotation(new ExpressionValidator(), expression);
+
+            var calculator = new Calculator.MVVM.Model.Calculator();
+
+            var result = calculator.GetAnswer(notation);
+
+            Assert.That(result, Is.EqualTo(2.25).Within(0.001));
+        }
+
+        [Test]
+        public void GetAnswer_ComplexValidExpressionWithPowOperation_ShouldReturnCorrectResult()
+        {
+            string expression = "2 ^ (3 / 4 - (1 / 2.5^2)) + 1 / (2 ^ -4)";
+
+            var notation = new PolishNotation(new ExpressionValidator(), expression);
+
+            var calculator = new Calculator.MVVM.Model.Calculator();
+
+            var result = calculator.GetAnswer(notation);
+
+            Assert.That(result, Is.EqualTo(17.505).Within(0.001));
+        }
     }
 }
