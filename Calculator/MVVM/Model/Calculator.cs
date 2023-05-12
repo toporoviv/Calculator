@@ -17,7 +17,8 @@ namespace Calculator.MVVM.Model
                 { "+", (x, y) => x + y },
                 { "-", (x, y) => x - y },
                 { "*", (x, y) => x * y },
-                { "/", (x, y) => Math.Abs(y) < _eps ? throw new DivideByZeroException() : x / y }
+                { "/", (x, y) => Math.Abs(y) < _eps ? throw new DivideByZeroException() : x / y },
+                { "^", (x, y) => Math.Pow(x, y) }
             };
 
         public static Dictionary<string, int> Operations { get; } = new Dictionary<string, int>()
@@ -27,7 +28,8 @@ namespace Calculator.MVVM.Model
             { "+", 2 },
             { "-", 2 },
             { "*", 3 },
-            { "/", 3 }
+            { "/", 3 },
+            { "^", 3 }
         };
 
         public double GetAnswer(IExpressionBuilder notation)
