@@ -1,5 +1,6 @@
 ﻿using Calculator.MVVM.Exceptions;
 using Calculator.MVVM.Interfaces;
+using Calculator.MVVM.Model.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,18 +12,13 @@ using System.Threading.Tasks;
 
 namespace Calculator.MVVM.Model
 {
-    public class PolishNotation : IExpressionBuilder
+    public class PolishNotation : BaseExpression
     {
-        private readonly string _expression;
-        private readonly IExpressionValidator _expressionValidator;
-
-        public PolishNotation(IExpressionValidator expressionValidator, string expression)
+        public PolishNotation(IExpressionValidator expressionValidator, string expression) : base(expressionValidator, expression)
         {
-            _expressionValidator = expressionValidator;
-            _expression = _expressionValidator.GetNormalizedExpression(expression);
         }
 
-        public List<string> GetExpression()
+        public override List<string> GetExpression()
         {
             if (!IsValid()) throw new FormatException();
 
@@ -69,14 +65,14 @@ namespace Calculator.MVVM.Model
             return expression.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
         }
 
-        public bool IsValid()
+        public override bool IsValid()
         {
             return _expressionValidator.IsValidExpression(_expression);
         }
 
         private int GetOperationPriority(string operation)
         {
-            if (Calculator.Operations.ContainsKey(operation)) return Calculator.Operations[operation];
+            if (EngineeringCalculator.Operations.ContainsKey(operation)) return EngineeringCalculator.Operations[operation];
             else throw new OperationNotExistException($"операции {operation} не существует");
         }
     }
