@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Calculator.MVVM.Interfaces
 {
-    public interface IExpressionBuilder
+    public interface IExpression
     {
         List<string> GetExpression();
 
