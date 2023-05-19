@@ -13,7 +13,7 @@ namespace Calculator.MVVM.Model
         {
             if (SymbolCount == 0) return;
 
-            double symbolWidth = Helper.GetSymbolWidth(FontSize);
+            double symbolWidth = Helper.Helper.GetSymbolWidth(FontSize);
             double currentWidth = TextBoxWidth / (double)SymbolCount;
             int newFontSize = FontSize;
 
@@ -21,15 +21,15 @@ namespace Calculator.MVVM.Model
             {
                 if (FontSize >= MaximumWidth) return;
 
-                symbolWidth = Helper.GetSymbolWidth(++newFontSize);
-                while (newFontSize <= MaximumWidth && symbolWidth < currentWidth) symbolWidth = Helper.GetSymbolWidth(++newFontSize);
+                symbolWidth = Helper.Helper.GetSymbolWidth(++newFontSize);
+                while (newFontSize <= MaximumWidth && symbolWidth < currentWidth) symbolWidth = Helper.Helper.GetSymbolWidth(++newFontSize);
             }
             else
             {
                 if (FontSize <= MinimumWidth) return;
 
-                symbolWidth = Helper.GetSymbolWidth(--newFontSize);
-                while (newFontSize >= MinimumWidth && symbolWidth > currentWidth) symbolWidth = Helper.GetSymbolWidth(--newFontSize);
+                symbolWidth = Helper.Helper.GetSymbolWidth(--newFontSize);
+                while (newFontSize >= MinimumWidth && symbolWidth > currentWidth) symbolWidth = Helper.Helper.GetSymbolWidth(--newFontSize);
             }
 
             FontSize = newFontSize;
