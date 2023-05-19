@@ -1,4 +1,5 @@
 ﻿using Calculator.MVVM.Model;
+using Calculator.MVVM.Model.Notation;
 using Calculator.MVVM.Model.Validator;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace Calculator.Tests
 
             var notation = new PolishNotation(new ExpressionValidator(), expression);
 
-            var calculator = new Calculator.MVVM.Model.Calculator();
+            var calculator = new Calculator.MVVM.Model.EngineeringCalculator();
 
             var result = calculator.GetAnswer(notation);
 
@@ -32,7 +33,7 @@ namespace Calculator.Tests
 
             var notation = new PolishNotation(new ExpressionValidator(), expression);
 
-            var calculator = new Calculator.MVVM.Model.Calculator();
+            var calculator = new Calculator.MVVM.Model.EngineeringCalculator();
 
             var result = calculator.GetAnswer(notation);
 
@@ -46,7 +47,7 @@ namespace Calculator.Tests
 
             var notation = new PolishNotation(new ExpressionValidator(), expression);
 
-            var calculator = new Calculator.MVVM.Model.Calculator();
+            var calculator = new Calculator.MVVM.Model.EngineeringCalculator();
 
             var result = calculator.GetAnswer(notation);
 
@@ -60,7 +61,7 @@ namespace Calculator.Tests
 
             var notation = new PolishNotation(new ExpressionValidator(), expression);
 
-            var calculator = new Calculator.MVVM.Model.Calculator();
+            var calculator = new Calculator.MVVM.Model.EngineeringCalculator();
 
             var result = calculator.GetAnswer(notation);
 
@@ -76,7 +77,7 @@ namespace Calculator.Tests
 
                 var notation = new PolishNotation(new ExpressionValidator(), expression);
 
-                var calculator = new Calculator.MVVM.Model.Calculator();
+                var calculator = new Calculator.MVVM.Model.EngineeringCalculator();
 
                 var result = calculator.GetAnswer(notation);
             });
@@ -91,7 +92,7 @@ namespace Calculator.Tests
 
                 var notation = new PolishNotation(new ExpressionValidator(), expression);
 
-                var calculator = new Calculator.MVVM.Model.Calculator();
+                var calculator = new Calculator.MVVM.Model.EngineeringCalculator();
 
                 var result = calculator.GetAnswer(notation);
             });
@@ -104,7 +105,7 @@ namespace Calculator.Tests
 
             var notation = new PolishNotation(new ExpressionValidator(), expression);
 
-            var calculator = new Calculator.MVVM.Model.Calculator();
+            var calculator = new Calculator.MVVM.Model.EngineeringCalculator();
 
             var result = calculator.GetAnswer(notation);
 
@@ -118,7 +119,7 @@ namespace Calculator.Tests
 
             var notation = new PolishNotation(new ExpressionValidator(), expression);
 
-            var calculator = new Calculator.MVVM.Model.Calculator();
+            var calculator = new Calculator.MVVM.Model.EngineeringCalculator();
 
             var result = calculator.GetAnswer(notation);
 
@@ -132,7 +133,7 @@ namespace Calculator.Tests
 
             var notation = new PolishNotation(new ExpressionValidator(), expression);
 
-            var calculator = new Calculator.MVVM.Model.Calculator();
+            var calculator = new Calculator.MVVM.Model.EngineeringCalculator();
 
             var result = calculator.GetAnswer(notation);
 
@@ -146,7 +147,7 @@ namespace Calculator.Tests
 
             var notation = new PolishNotation(new ExpressionValidator(), expression);
 
-            var calculator = new Calculator.MVVM.Model.Calculator();
+            var calculator = new Calculator.MVVM.Model.EngineeringCalculator();
 
             var result = calculator.GetAnswer(notation);
 
@@ -160,7 +161,7 @@ namespace Calculator.Tests
 
             var notation = new PolishNotation(new ExpressionValidator(), expression);
 
-            var calculator = new Calculator.MVVM.Model.Calculator();
+            var calculator = new Calculator.MVVM.Model.EngineeringCalculator();
 
             var result = calculator.GetAnswer(notation);
 

@@ -1,4 +1,5 @@
 ﻿using Calculator.MVVM.Model;
+using Calculator.MVVM.Model.Notation;
 using Calculator.MVVM.Model.Validator;
 using System;
 using System.Collections.Generic;
