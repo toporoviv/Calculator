@@ -1,6 +1,11 @@
 ﻿using Calculator.MVVM.Exceptions;
 using Calculator.MVVM.Interfaces;
 using Calculator.MVVM.Model;
+using Calculator.MVVM.Model.Enum;
+using Calculator.MVVM.Model.Factory.CalculatorFactory;
+using Calculator.MVVM.Model.Factory.ExpressionFactory;
+using Calculator.MVVM.Model.Helper;
+using Calculator.MVVM.Model.Notation;
 using Calculator.MVVM.Model.Validator;
 using System;
 using System.Collections.Generic;
@@ -16,8 +21,9 @@ namespace Calculator.MVVM.ViewModel
 {
     public class CalculatorViewModel : BaseViewModel
     {
-        private readonly Model.Calculator _calculator;
-        private IExpressionBuilder _notation;
+        private BaseCalculator _calculator;
+        private IExpression _notation;
+        private CalculatorEnum _currentCalculator;
         private BaseTextBoxValidator _textBoxValidator;
         private readonly IExpressionValidator _expressionValidator;
         private string _expression;
@@ -34,8 +40,9 @@ namespace Calculator.MVVM.ViewModel
 
         public CalculatorViewModel()
         {
-            _calculator = new Model.Calculator();
+            _calculator = new GeneralCalculator();
             _expression = string.Empty;
+            _currentCalculator = CalculatorEnum.GeneralCalculator;
             _expressionValidator = new ExpressionValidator();
             _textBoxValidator = new TextBoxValidator { FontSize = 20, TextBoxWidth = 295 };
         }
@@ -50,13 +57,24 @@ namespace Calculator.MVVM.ViewModel
             }
         }
 
+        public Visibility IsGeneralCalculator
+        {
+            get => _currentCalculator == CalculatorEnum.GeneralCalculator ? Visibility.Visible : Visibility.Hidden;
+        }
+
+        public Visibility IsEngineeringCalculator
+        {
+            get => _currentCalculator == CalculatorEnum.EngineeringCalculator ? Visibility.Visible : Visibility.Hidden;
+        }
+
         public ICommand EqualCommand
         {
             get => new Command(obj =>
             {
                 try
                 {
-                    _notation = new PolishNotation(_expressionValidator, Expression);
+                    var expressionFactory = new ExpressionFactory();
+                    _notation = expressionFactory.CreateExpression(_currentCalculator, _expression);
                     Expression = _calculator.GetAnswer(_notation).ToString();
                 }
                 catch (OperationNotExistException ex)
@@ -101,6 +119,29 @@ namespace Calculator.MVVM.ViewModel
             {
                 Expression = "";
                 _textBoxValidator.SymbolCount = 0;
+            });
+        }
+
+        public ICommand ChangeCalculatorCommand
+        {
+            get => new Command(obj =>
+            {
+                Expression = "";
+                _textBoxValidator.SymbolCount = 0;
+                _currentCalculator = (CalculatorEnum)obj;
+                var producer = new CalculatorProducer(_currentCalculator);
+
+                try
+                {
+                    _calculator = producer.GetFactory().CreateCalculator();
+                }
+                catch (NullReferenceException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+                OnPropertyChanged(nameof(IsGeneralCalculator));
+                OnPropertyChanged(nameof(IsEngineeringCalculator));
             });
         }
     }
