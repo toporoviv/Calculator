@@ -1,16 +1,11 @@
-﻿using Calculator.MVVM.Exceptions;
-using Calculator.MVVM.Interfaces;
+﻿using Calculator.MVVM.Interfaces;
 using Calculator.MVVM.Model.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-namespace Calculator.MVVM.Model
+namespace Calculator.MVVM.Model.Notation
 {
     public class PolishNotation : BaseExpression
     {
@@ -51,8 +46,8 @@ namespace Calculator.MVVM.Model
                     {
                         if (operationsStack.Count > 0)
                         {
-                            if (GetOperationPriority(value) <=
-                                GetOperationPriority(operationsStack.Peek())) expression += operationsStack.Pop() + " ";
+                            if (Model.Helper.OperationHelper.GetOperationPriority(value) <=
+                                Model.Helper.OperationHelper.GetOperationPriority(operationsStack.Peek())) expression += operationsStack.Pop() + " ";
                         }
 
                         operationsStack.Push(value);
@@ -63,17 +58,6 @@ namespace Calculator.MVVM.Model
             while (operationsStack.Count != 0) expression += operationsStack.Pop() + " ";
 
             return expression.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
-        }
-
-        public override bool IsValid()
-        {
-            return _expressionValidator.IsValidExpression(_expression);
-        }
-
-        private int GetOperationPriority(string operation)
-        {
-            if (EngineeringCalculator.Operations.ContainsKey(operation)) return EngineeringCalculator.Operations[operation];
-            else throw new OperationNotExistException($"операции {operation} не существует");
         }
     }
 }
