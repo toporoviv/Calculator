@@ -1,10 +1,8 @@
-﻿using System;
+﻿using Calculator.MVVM.Model.Enum;
+using Calculator.MVVM.Model.Factory;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Calculator.MVVM.Model
+namespace Calculator.MVVM.Model.Helper
 {
     public static class Helper
     {
