@@ -9,5 +9,7 @@ namespace Calculator.MVVM.Interfaces
     public interface ICalculator
     {
         double GetAnswer(IExpression notation);
+
+        bool IsOperator(string operation);
     }
 }
