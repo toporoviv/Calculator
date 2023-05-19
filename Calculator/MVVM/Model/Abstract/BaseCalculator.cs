@@ -32,6 +32,37 @@ namespace Calculator.MVVM.Model
             { "^", 3 }
         };
 
-        public abstract double GetAnswer(IExpression notation);
+        public virtual double GetAnswer(IExpression expression)
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+            if (expression is null) throw new ArgumentNullException();
+
+            var newExpression = expression.GetExpression();
+
+            int index = 0;
+            while (index < newExpression.Count && newExpression.Count != 1)
+            {
+                if (IsOperator(newExpression[index]))
+                {
+                    var arg1 = double.Parse(newExpression[index - 2]);
+                    var arg2 = double.Parse(newExpression[index - 1]);
+                    var result = _binaryOperations[newExpression[index]](arg1, arg2);
+
+                    newExpression.RemoveAt(index - 2);
+                    newExpression.RemoveAt(index - 2);
+                    newExpression[index - 2] = result.ToString();
+                    index = -1;
+                }
+
+                index++;
+            }
+
+            return double.Parse(newExpression[0]);
+        }
+
+        public virtual bool IsOperator(string operation)
+        {
+            return Operations.ContainsKey(operation);
+        }
     }
 }

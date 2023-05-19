@@ -20,6 +20,6 @@ namespace Calculator.MVVM.Model.Abstract
 
         public abstract List<string> GetExpression();
 
-        public abstract bool IsValid();
+        public virtual bool IsValid() => _expressionValidator.IsValidExpression(_expression);
     }
 }
