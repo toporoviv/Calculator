@@ -60,13 +60,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="MVVM\Exceptions\BadScopeException.cs" />
     <Compile Include="MVVM\Exceptions\ExpressionLengthOverflowException.cs" />
+    <Compile Include="MVVM\Exceptions\NumberOfOperandsAndOperationsException.cs" />
     <Compile Include="MVVM\Interfaces\ICalculator.cs" />
     <Compile Include="MVVM\Interfaces\IExpressionFactory.cs" />
     <Compile Include="MVVM\Model\Abstract\BaseCalculator.cs" />
-    <Compile Include="MVVM\Model\Abstract\BaseExpression.cs" />
     <Compile Include="MVVM\Model\Command.cs" />
     <Compile Include="MVVM\Model\Enum\CalculatorEnum.cs" />
+    <Compile Include="MVVM\Model\Extensions\ExpressionExtension.cs" />
     <Compile Include="MVVM\Model\Factory\CalculatorFactory\CalculatorFactory.cs" />
     <Compile Include="MVVM\Model\Factory\CalculatorFactory\CalculatorProducer.cs" />
     <Compile Include="MVVM\Model\Factory\CalculatorFactory\EngineeringCalculatorFactory.cs" />
@@ -91,11 +93,9 @@
   <ItemGroup>
     <Compile Include="MVVM\Exceptions\OperationNotExistException.cs" />
     <Compile Include="MVVM\Interfaces\IExpression.cs" />
-    <Compile Include="MVVM\Interfaces\IExpressionValidator.cs" />
     <Compile Include="MVVM\Interfaces\IRegexExpressionBuilder.cs" />
     <Compile Include="MVVM\Model\Abstract\BaseViewModel.cs" />
     <Compile Include="MVVM\Model\EngineeringCalculator.cs" />
-    <Compile Include="MVVM\Model\Validator\ExpressionValidator.cs" />
     <Compile Include="MVVM\Model\Notation\PolishNotation.cs" />
     <Compile Include="MVVM\Model\Builder\RegexExpressionBuilder.cs" />
     <Compile Include="MVVM\Model\Helper\RegexHelper.cs" />
