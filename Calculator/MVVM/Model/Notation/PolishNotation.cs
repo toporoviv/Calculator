@@ -1,5 +1,5 @@
 ﻿using Calculator.MVVM.Interfaces;
-using Calculator.MVVM.Model.Abstract;
+using Calculator.MVVM.Model.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,19 +7,19 @@ using System.Text.RegularExpressions;
 
 namespace Calculator.MVVM.Model.Notation
 {
-    public class PolishNotation : BaseExpression
+    public class PolishNotation : IExpression
     {
-        public PolishNotation(IExpressionValidator expressionValidator, string expression) : base(expressionValidator, expression)
+        public List<string> GetExpression(string expression)
         {
-        }
+            expression = expression
+                .NormalizedExpression()
+                .EnsureIsNotNullAndNotEmpty()
+                .EnsureScopesArePlacedCorrectly()
+                .EnsureNumberOfOperandsAndOperationsIsCorrect();
 
-        public override List<string> GetExpression()
-        {
-            if (!IsValid()) throw new FormatException();
+            string resultExpression = string.Empty;
 
-            string expression = string.Empty;
-
-            var matches = Regex.Matches(_expression, RegexHelper.Pattern);
+            var matches = Regex.Matches(expression, RegexHelper.Pattern);
 
             var operationsStack = new Stack<string>();
 
@@ -28,7 +28,7 @@ namespace Calculator.MVVM.Model.Notation
                 string value = matches[i].Value;
 
                 // Если это число
-                if (value.Any(x => char.IsDigit(x))) expression += value + " ";
+                if (value.Any(x => char.IsDigit(x))) resultExpression += value + " ";
                 else // оператор
                 {
                     if (value == "(") operationsStack.Push(value);
@@ -38,7 +38,7 @@ namespace Calculator.MVVM.Model.Notation
 
                         while (stackElement != "(")
                         {
-                            expression += stackElement + " ";
+                            resultExpression += stackElement + " ";
                             stackElement = operationsStack.Pop();
                         }
                     }
@@ -47,7 +47,7 @@ namespace Calculator.MVVM.Model.Notation
                         if (operationsStack.Count > 0)
                         {
                             if (Model.Helper.OperationHelper.GetOperationPriority(value) <=
-                                Model.Helper.OperationHelper.GetOperationPriority(operationsStack.Peek())) expression += operationsStack.Pop() + " ";
+                                Model.Helper.OperationHelper.GetOperationPriority(operationsStack.Peek())) resultExpression += operationsStack.Pop() + " ";
                         }
 
                         operationsStack.Push(value);
@@ -55,9 +55,9 @@ namespace Calculator.MVVM.Model.Notation
                 }
             }
 
-            while (operationsStack.Count != 0) expression += operationsStack.Pop() + " ";
+            while (operationsStack.Count != 0) resultExpression += operationsStack.Pop() + " ";
 
-            return expression.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            return resultExpression.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
         }
     }
 }

@@ -1,31 +1,31 @@
 ﻿using Calculator.MVVM.Interfaces;
-using Calculator.MVVM.Model.Abstract;
+using Calculator.MVVM.Model.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Calculator.MVVM.Model.Notation
 {
-    public class DefaultNotation : BaseExpression
+    public class DefaultNotation : IExpression
     {
-        public DefaultNotation(IExpressionValidator expressionValidator, string expression) : base(expressionValidator, expression)
+        public List<string> GetExpression(string expression)
         {
-        }
+            expression = expression
+                .NormalizedExpression()
+                .EnsureIsNotNullAndNotEmpty()
+                .EnsureScopesArePlacedCorrectly()
+                .EnsureNumberOfOperandsAndOperationsIsCorrect();
 
-        public override List<string> GetExpression()
-        {
-            if (!IsValid()) throw new FormatException();
+            var matches = Regex.Matches(expression, RegexHelper.Pattern);
 
-            var matches = Regex.Matches(_expression, RegexHelper.Pattern);
-
-            var expression = new List<string>();
+            var expressionResult = new List<string>();
 
             for (int i = 0; i < matches.Count; i++)
             {
-                expression.Add(matches[i].Value);
+                expressionResult.Add(matches[i].Value);
             }
 
-            return expression;
+            return expressionResult;
         }
     }
 }

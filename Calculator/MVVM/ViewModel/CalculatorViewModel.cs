@@ -25,7 +25,6 @@ namespace Calculator.MVVM.ViewModel
         private IExpression _notation;
         private CalculatorEnum _currentCalculator;
         private BaseTextBoxValidator _textBoxValidator;
-        private readonly IExpressionValidator _expressionValidator;
         private string _expression;
 
         public string Expression
@@ -43,7 +42,6 @@ namespace Calculator.MVVM.ViewModel
             _calculator = new GeneralCalculator();
             _expression = string.Empty;
             _currentCalculator = CalculatorEnum.GeneralCalculator;
-            _expressionValidator = new ExpressionValidator();
             _textBoxValidator = new TextBoxValidator { FontSize = 20, TextBoxWidth = 295 };
         }
 
@@ -74,8 +72,8 @@ namespace Calculator.MVVM.ViewModel
                 try
                 {
                     var expressionFactory = new ExpressionFactory();
-                    _notation = expressionFactory.CreateExpression(_currentCalculator, _expression);
-                    Expression = _calculator.GetAnswer(_notation).ToString();
+                    _notation = expressionFactory.CreateExpression(_currentCalculator);
+                    Expression = _calculator.GetAnswer(_notation, _expression).ToString();
                 }
                 catch (OperationNotExistException ex)
                 {

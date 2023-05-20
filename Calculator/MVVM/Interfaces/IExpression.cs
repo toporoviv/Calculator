@@ -8,8 +8,6 @@ namespace Calculator.MVVM.Interfaces
 {
     public interface IExpression
     {
-        List<string> GetExpression();
-
-        bool IsValid();
+        List<string> GetExpression(string expression);
     }
 }

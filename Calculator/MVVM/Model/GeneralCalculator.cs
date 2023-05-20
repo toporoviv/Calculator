@@ -9,23 +9,23 @@ namespace Calculator.MVVM.Model
 {
     public class GeneralCalculator : BaseCalculator
     {
-        public override double GetAnswer(IExpression notation)
+        public override double GetAnswer(IExpression notation, string expression)
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
             var result = 0.0;
 
-            var expression = notation.GetExpression();
+            var currentExpression = notation.GetExpression(expression);
 
-            while (expression.Count != 1)
+            while (currentExpression.Count != 1)
             {
-                var fisrtArg = double.Parse(expression[0]);
-                var secondArg = double.Parse(expression[2]);
-                result = _binaryOperations[expression[1]](fisrtArg, secondArg);
+                var fisrtArg = double.Parse(currentExpression[0]);
+                var secondArg = double.Parse(currentExpression[2]);
+                result = _binaryOperations[currentExpression[1]](fisrtArg, secondArg);
 
-                expression.RemoveAt(0);
-                expression.RemoveAt(0);
+                currentExpression.RemoveAt(0);
+                currentExpression.RemoveAt(0);
 
-                expression[0] = result.ToString();
+                currentExpression[0] = result.ToString();
             }
 
             return result;

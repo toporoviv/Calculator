@@ -9,6 +9,6 @@ namespace Calculator.MVVM.Interfaces
 {
     public interface IExpressionFactory
     {
-        IExpression CreateExpression(CalculatorEnum calculatorEnum, string expression);
+        IExpression CreateExpression(CalculatorEnum calculatorEnum);
     }
 }

@@ -32,12 +32,12 @@ namespace Calculator.MVVM.Model
             { "^", 3 }
         };
 
-        public virtual double GetAnswer(IExpression expression)
+        public virtual double GetAnswer(IExpression notation, string expression)
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
-            if (expression is null) throw new ArgumentNullException();
+            if (notation is null) throw new ArgumentNullException();
 
-            var newExpression = expression.GetExpression();
+            var newExpression = notation.GetExpression(expression);
 
             int index = 0;
             while (index < newExpression.Count && newExpression.Count != 1)

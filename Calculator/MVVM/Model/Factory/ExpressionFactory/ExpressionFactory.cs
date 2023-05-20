@@ -12,12 +12,12 @@ namespace Calculator.MVVM.Model.Factory.ExpressionFactory
 {
     public class ExpressionFactory : IExpressionFactory
     {
-        public IExpression CreateExpression(CalculatorEnum calculatorEnum, string expression)
+        public IExpression CreateExpression(CalculatorEnum calculatorEnum)
         {
             switch (calculatorEnum)
             {
-                case CalculatorEnum.GeneralCalculator: return new DefaultNotation(new ExpressionValidator(), expression);
-                case CalculatorEnum.EngineeringCalculator: return new PolishNotation(new ExpressionValidator(), expression);
+                case CalculatorEnum.GeneralCalculator: return new DefaultNotation();
+                case CalculatorEnum.EngineeringCalculator: return new PolishNotation();
                 default: return null;
             }
         }
